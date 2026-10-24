@@ -28,8 +28,8 @@ framework-res.apk`) and python3 with `cryptography`:
 sh build.sh
 ```
 
-`sign.py` signs with a v1 (JAR) signature, which Android 11 accepts for an app that targets
-SDK 28, so `apksigner` is not needed. The signing key is created in `build/` on the first
+`tools/sign.py` signs with a v1 (JAR) signature, which Android 11 accepts for an app that targets
+SDK 28, so `apksigner` is not needed. The signing key is created in `build/` (repository root) on the first
 run and is not part of the repository; keep it if you want to install updates over the
 prebuilt app.
 

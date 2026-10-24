@@ -50,6 +50,7 @@ apart.
   runs it.
 - **Stock Android Settings** reachable again through a tiny launcher app (the vendor launcher
   has no entry for it).
+- **An "HDMI" app** that switches to the HDMI input without any vendor app.
 - **USB audio output** (on a rooted device). The vendor shipped the USB audio HAL
   disabled. A small Magisk module turns it back on, so USB headsets and DACs take over
   audio when you plug them in. Stereo devices work. One 5.1 device (Bose Companion 5)
@@ -62,6 +63,7 @@ apart.
 | [fel-backup/](fel-backup/) | full eMMC backup over USB, do this first |
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
 | [root/](root/) | root with Magisk, patched on the projector itself |
+| [hdmi-input/](hdmi-input/) | an "HDMI" app that shows the HDMI input through the stock TV framework |
 | [settings-launcher/](settings-launcher/) | an "Android Settings" app icon: the vendor hides the stock Settings app |
 | [magisk-debloat/](magisk-debloat/) | remove it for real, systemless Magisk module (needs root) |
 | [usb-audio/](usb-audio/) | Magisk module that turns USB audio back on (needs root) |
