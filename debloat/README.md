@@ -26,6 +26,7 @@ Needed for the hardware, do not disable:
 | `com.hysd.vafocus` | autofocus (app is called `tpjz_allwinner`) |
 | `com.htc.magcubicos` | launcher, keystone |
 | `com.htc.htcbluetoothremotecontrol` | the remote |
+| `com.htc.closedialog` | shows the fan-error and overtemperature screen, then powers the projector off (safety). Requests no `INTERNET` permission, contains no URLs and no audio recording code; the earlier "network, mic" flags came from its shared system UID |
 | `com.mphotool.*`, `com.softwinner.miracastReceiver` | AirPlay, DLNA, USB cast, Miracast |
 | `com.softwinner.awsource`, `com.softwinner.awlivetv`, `com.softwinner.TvdVideo` | HDMI input |
 

@@ -11,8 +11,7 @@ adb reboot
 
 What it does:
 
-1. Reads [../debloat/packages.txt](../debloat/packages.txt), minus the packages in
-   [keep.txt](keep.txt).
+1. Reads [../debloat/packages.txt](../debloat/packages.txt).
 2. Removes `/data` updates of those packages (`pm uninstall`), so the system copy is what is left.
 3. Pulls the APKs to `backup-<serial>/` (skip with `--no-backup`).
 4. Builds the Magisk module `hy310_debloat`: for every package, an empty `.replace` marker in
@@ -41,10 +40,8 @@ restores the apps from the `super` partition.
 
 ## Kept on purpose
 
-`com.htc.closedialog` stays installed (disabled). On the firmware analyzed here it hosts the
-screen that announces a fan or overtemperature error and then powers the projector off. The
-kernel's own thermal limit still applies without it, but there is no reason to delete a
-safety path. Edit [keep.txt](keep.txt) to change the list.
+Packages the hardware needs are listed under "Keep" in [../debloat/README.md](../debloat/README.md) and are
+not in `packages.txt`, so this module never touches them.
 
 ## Tested
 

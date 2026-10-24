@@ -29,8 +29,7 @@ trap 'rm -rf "$tmp"' EXIT
 tree=${build_only:-$tmp/$MOD}
 mkdir -p "$tree"
 
-names "$here/keep.txt" >"$tmp/keep"
-names "$here/../debloat/packages.txt" | grep -v -x -F -f "$tmp/keep" >"$tmp/pkgs" || true
+names "$here/../debloat/packages.txt" >"$tmp/pkgs"
 [ -s "$tmp/pkgs" ] || { echo "no packages to remove" >&2; exit 1; }
 
 # A /data copy is an update of a system app. Remove it first, otherwise "pm path" points at /data.
