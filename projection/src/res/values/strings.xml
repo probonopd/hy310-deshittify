@@ -12,6 +12,7 @@
         <item>Obstacle avoidance@@[ \"$(getprop persist.sys.obstacle)\" = 1 ] &amp;&amp; echo On || echo Off@@n=1; [ \"$(getprop persist.sys.obstacle)\" = 1 ] &amp;&amp; n=0; setprop persist.sys.obstacle $n</item>
         <item>Digital zoom (0-20)@@sh $P/zoom.sh get@@sh $P/zoom.sh step $1</item>
         <item>Manual keystone (4 corners)@@echo@@am start --user 0 -n io.github.probonopd.hy310projection/.KeystoneActivity &gt;/dev/null</item>
+        <item>Camera view@@echo@@pm grant io.github.probonopd.hy310projection android.permission.CAMERA || exit 1; am start --user 0 -n io.github.probonopd.hy310projection/.CameraActivity &gt;/dev/null</item>
         <item>Reset keystone@@echo@@sh $P/zoom.sh reset</item>
         <item>Installation mode@@case $(CLASSPATH=$APK app_process /system/bin io.github.probonopd.hy310projection.Helper get-mirror) in 0) echo Front;; 1) echo Rear;; 2) echo Front ceiling;; 3) echo Rear ceiling;; *) echo error: unknown mode;; esac@@cur=$(CLASSPATH=$APK app_process /system/bin io.github.probonopd.hy310projection.Helper get-mirror) || exit 1; new=$(( (cur + $1 + 4) % 4 )); CLASSPATH=$APK app_process /system/bin io.github.probonopd.hy310projection.Helper set-mirror $new &gt;/dev/null || exit 1; setprop persist.sys.panelvalue $new; if [ \"$(getprop persist.sys.camok)\" = 1 ] &amp;&amp; [ \"$(getprop persist.sys.focusupdn)\" = 0 ]; then sh $P/zoom.sh remap $cur $new; fi; if [ \"$(getprop persist.sys.tpryauto)\" = 1 ]; then am broadcast -a android.intent.projective_mode -f 0x10000000 &gt;/dev/null; fi</item>
     </string-array>
