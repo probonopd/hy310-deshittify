@@ -117,3 +117,39 @@ What breaks when Play services are disabled: Play Store installs and updates, Go
 ## Assistant crash without Play services
 
 With Play services disabled the Google app crashes after it has recognized speech (missing Google Sans font from the Play services font provider). The [assistant-fonts](../assistant-fonts/) Magisk module fixes that without re-enabling Play services.
+
+## Audit
+
+`audit.sh` checks a device for exposure and for known indicators of pre-installed malware. It is strictly read-only: it only runs `adb shell` reads (`getprop`, `pm list`, `ss`, `ls`, `stat`, `find`, `grep`) and keeps temporary files on the host. It never reads block devices, never searches `/`, and never touches `/sys`.
+
+```
+sh privacy/audit.sh                  # uses su -c where available
+sh privacy/audit.sh --no-root        # shell user only (checks 2 and 3 are skipped)
+sh privacy/audit.sh --ioc my.txt     # another indicator file
+```
+
+Honors `ANDROID_SERIAL`, refuses zero or several devices, prints `PASS` / `WARN` / `INFO` per check and exits 1 if any `WARN` was printed. Every adb call has a 20 second timeout.
+
+| # | Check | WARN when |
+|---|---|---|
+| 1 | `ro.adb.secure`, `ro.debuggable`, `service.adb.tcp.port`, `persist.adb.tcp.port` | adb does not require keys, or the build is debuggable. Network adb on is only INFO: it is convenient, but unauthenticated adb on a network is a risk |
+| 2 | `ss -tulnp` as root | a TCP listener on all interfaces that is not adbd (UDP ones, and mdnsd, are INFO) |
+| 3 | `ss -tnp` as root | a remote address equals an IP in `[ips]`; other remotes are listed as INFO with the process name |
+| 4 | `[packages]` against `pm list packages -u` / `-d` | an IOC package is installed and enabled (disabled or removed-for-user is INFO, absent is PASS) |
+| 5 | `[paths]`, SUID/SGID files in `/system/bin /system/xbin /vendor/bin /product/bin` | an IOC path exists, or any SUID/SGID file is there (stock builds have none) |
+| 6 | `stat /oem`, `ls -l /dev/block/mmcblk0` | `/oem` is world-writable, or the eMMC node is readable or writable by everyone |
+| 7 | `/*/preinstall` directories, `/system/bin/preinstall`, `persist.sys.install_start`, init `.rc` files | a preinstall directory is non-empty, the script exists, or an init script mentions `appsdisable` / `preinstall` (these are the paths that bring removed apps back) |
+| 8 | `[domains]` against all `getprop` values | an IOC domain appears in a property |
+| 9 | Play services state, `location_mode` | never (INFO only; `harden.sh status` has the full privacy picture) |
+
+### How to read the result
+
+A WARN is a lead, not a verdict. Some findings are structural on cheap vendor firmware (a world-writable `/oem`, a preinstall script that is part of the factory image) and are worth knowing about even when nothing malicious runs. A SUID root helper in `/system/bin` that is not part of AOSP deserves a closer look (`strings`, comparison with another unit of the same model). A clean run proves little: it only covers the listed indicators and the checks above.
+
+### ioc.txt
+
+Sections `[packages]`, `[paths]`, `[domains]`, `[ips]`, one entry per line with a trailing comment. The entries come from public community write-ups (github.com/Kavan00/Android-Projector-C2-Malware, github.com/zane-programs/reversing-with-claude-code, github.com/jrm360seclab/aodin-vo1d-malware, github.com/micha102/hy300pro-debloat). Those write-ups are community reports, partly AI-assisted, and unverified by us; the packages among them that this repo removes or disables also came from our own analysis of the firmware. Treat every entry as unconfirmed.
+
+### Not checked
+
+Network traffic content, DNS queries (domains are only matched against properties, not resolved connections), file integrity of system partitions, kernel and bootloader state, and anything under `/sys`.

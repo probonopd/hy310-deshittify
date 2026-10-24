@@ -1,0 +1,55 @@
+# Indicators of compromise for audit.sh. Read-only data, one entry per line.
+# Everything here is a lead, not a verdict: the entries come from public
+# community write-ups (partly AI-assisted, unverified by us) and from our own
+# analysis of one firmware. A match means "look closer", not "infected".
+#
+# Sources (public GitHub write-ups):
+#   [K] github.com/Kavan00/Android-Projector-C2-Malware
+#   [Z] github.com/zane-programs/reversing-with-claude-code
+#   [J] github.com/jrm360seclab/aodin-vo1d-malware
+#   [M] github.com/micha102/hy300pro-debloat
+#   [O] our own analysis of the HY310 firmware (packages we removed or disabled)
+#
+# Format: sections [packages] [paths] [domains] [ips]; the value is the first
+# word of a line, everything after '#' is a comment.
+
+[packages]
+com.hotack.silentsdk                 # [community, unverified] silent install SDK
+com.hotack.writesn                   # [community, unverified] serial number writer
+com.htc.htclauncherhighenglishd08    # [community + O] vendor launcher
+com.me.cash5                         # [community, unverified] pre-installed app
+com.htc.eventuploadservice           # [community + O] event upload service
+com.htc.expandsdk                    # [community + O] vendor expansion SDK
+com.htc.storeos                      # [community + O] vendor app store
+com.htc.htcotaupdate                 # [community + O] vendor OTA updater
+com.android.toofifi                  # [community, unverified] WLAN related helper
+com.toofifi.lineserver               # [community, unverified] line server
+com.htc.samescreen                   # [community + O] screen mirroring app
+android.rockchip.update.service      # [community + O] Rockchip OTA service
+com.android.umanalytics.yiyou        # [community + O] analytics
+com.android.sysapp                   # [community, unverified] generic system-looking app
+com.google.adtest                    # [community, unverified] ad test app
+
+[paths]
+/system/bin/qw                       # [community, unverified] hidden helper
+/system/bin/wifi                     # [community, unverified] hidden helper
+/vendor/bin/dbgserver                # [community, unverified] debug server
+/system/xbin/sysu                    # [community, unverified] su-like binary
+
+[domains]
+aodintech.com                        # [community, unverified]
+triplesai.com                        # [community, unverified]
+bigbigcloud.cn                       # [community, unverified]
+pixelpioneerss.com                   # [community, unverified]
+thedynamicleap.com                   # [community, unverified]
+smartinnovate.net                    # [community, unverified]
+net2fast.com                         # [community, unverified]
+srafx.com                            # [community, unverified]
+syslogcollector.com                  # [community, unverified]
+sda-1.xyz                            # [community, unverified]
+
+[ips]
+79.127.216.89                        # [community, unverified]
+107.151.220.86                       # [community, unverified]
+207.166.169.133                      # [community, unverified]
+38.55.17.113                         # [community, unverified]
