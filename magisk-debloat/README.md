@@ -11,7 +11,8 @@ adb reboot
 
 What it does:
 
-1. Reads [../debloat/packages.txt](../debloat/packages.txt).
+1. Reads [../debloat/packages.txt](../debloat/packages.txt), minus the packages in
+   [../debloat/keep-installed.txt](../debloat/keep-installed.txt) (disabled but never removed).
 2. Removes `/data` updates of those packages (`pm uninstall`), so the system copy is what is left.
 3. Pulls the APKs to `backup-<serial>/` (skip with `--no-backup`).
 4. Builds the Magisk module `hy310_debloat`: for every package, an empty `.replace` marker in

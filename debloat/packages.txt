@@ -14,7 +14,7 @@ com.htc.htcotaupdate              # vendor OTA updater
 android.rockchip.update.service   # Rockchip updater on Allwinner hardware
 
 # Suspicious / factory leftovers
-com.htc.hyk_test                  # 46 MB factory test; camera, mic, input injection, reboot
+com.htc.hyk_test                  # 46 MB factory test; camera, mic, input injection, reboot. DISABLE ONLY, never remove: see keep-installed.txt
 com.hotack.hotackfeaturestest     # OEM feature test
 
 # Bloat

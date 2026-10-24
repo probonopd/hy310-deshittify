@@ -1,0 +1,3 @@
+# Packages that are disabled by debloat/disable.sh but must stay installed (never removed with magisk-debloat).
+# Format as in packages.txt: one package per line, text after the name is ignored.
+com.htc.hyk_test   # removing it from the package manager makes the Bluetooth remote stop reconnecting after a reboot; disabled is enough
