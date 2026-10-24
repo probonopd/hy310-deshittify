@@ -70,6 +70,13 @@ apart.
 | [magisk-debloat/](magisk-debloat/) | remove it for real, systemless Magisk module (needs root) |
 | [usb-audio/](usb-audio/) | Magisk module that turns USB audio back on (needs root) |
 
+## Claude Code skills
+
+[.claude/skills/](.claude/skills/) holds notes written for an AI coding assistant (Claude Code) that
+doubles as a compact technical reference: FEL backup and guarded writes, rooting with Magisk, systemless
+removal, reading the firmware, building APKs without the Android SDK, and the projection controls.
+They are plain Markdown and readable without any tool.
+
 ## Never overwrite these
 
 Each projector carries data that exists only on that one unit and cannot be recreated:
