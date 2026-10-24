@@ -10,7 +10,11 @@ Do this before anything else. Reads only, writes nothing to the projector.
   mid-transfer. With it, every session worked on the first try.
 - `sunxi-fel` and `u-boot-installer.bin` from
   [well0nez/allwinner-h713-linux releases](https://github.com/well0nez/allwinner-h713-linux/releases)
-  (tested: v0.95-beta). Mainline `sunxi-tools` is not enough for the H713.
+  (tested: v0.95-beta). Mainline `sunxi-tools` is not enough for the H713: upstream has no merged H713 support
+  (open changes: [linux-sunxi/sunxi-tools#229](https://github.com/linux-sunxi/sunxi-tools/pull/229) and
+  [probonopd/sunxi-tools#1](https://github.com/probonopd/sunxi-tools/pull/1)), so use the `sunxi-fel` binary from
+  that release or a fork with H713 support. Check the `sunxi-fel` you use with `sunxi-fel version` before a backup
+  and write down which build it was.
 
 ```sh
 BASE=https://github.com/well0nez/allwinner-h713-linux/releases/download/v0.95-beta
