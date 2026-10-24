@@ -64,6 +64,7 @@ apart.
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
 | [root/](root/) | root with Magisk, patched on the projector itself |
 | [hdmi-input/](hdmi-input/) | an "HDMI" app that shows the HDMI input through the stock TV framework |
+| [assistant-settings/](assistant-settings/) | an "Assistant Settings" app icon: Google Assistant, Searchable apps |
 | [settings-launcher/](settings-launcher/) | an "Android Settings" app icon: the vendor hides the stock Settings app |
 | [magisk-debloat/](magisk-debloat/) | remove it for real, systemless Magisk module (needs root) |
 | [usb-audio/](usb-audio/) | Magisk module that turns USB audio back on (needs root) |
