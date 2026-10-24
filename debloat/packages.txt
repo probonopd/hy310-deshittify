@@ -1,0 +1,27 @@
+# Packages to disable. One per line; text after the package name is ignored.
+# Tested on the black and white logo version (Projector.20250214.153635).
+
+# Malware / spyware
+com.android.toofifi               # "casting" service that phones home; camera, mic, input injection
+com.toofifi.lineserver            # same toofifi stack; starts at boot, mic, writes secure settings
+com.htc.samescreen                # toofifi/samescreen screen-share stack
+com.htc.eventuploadservice        # telemetry uploader (BADBOX family)
+com.htc.expandsdk                 # ad injection and persistence
+
+# Re-infection vectors
+com.htc.storeos                   # unverified app store; can delete packages, write secure settings
+com.htc.htcotaupdate              # vendor OTA updater
+android.rockchip.update.service   # Rockchip updater on Allwinner hardware
+
+# Suspicious / factory leftovers
+com.htc.hyk_test                  # 46 MB factory test; camera, mic, input injection, reboot
+com.hotack.hotackfeaturestest     # OEM feature test
+com.htc.closedialog               # network, boot, reboot, mic
+
+# Bloat
+com.mobisystems.office            # 97 MB ad-supported office suite
+com.htc.clearmemory               # "RAM cleaner"
+com.htc.screensaver               # OEM screensaver
+org.chromium.webview_shell        # WebView developer shell, not a browser
+com.android.gallery3d             # redundant gallery
+com.android.mtp                   # MTP over USB, unused
