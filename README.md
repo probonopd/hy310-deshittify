@@ -63,6 +63,9 @@ apart.
 | [fel-backup/](fel-backup/) | full eMMC backup over USB, do this first |
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
 | [root/](root/) | root with Magisk, patched on the projector itself |
+| [privacy/](privacy/) | privacy hardening script (with undo) and a read-only audit against known malware indicators |
+| [launcher/](launcher/) | optional: what is known about using a different launcher (nothing here changes it) |
+| [docs/](docs/) | [related projects](docs/related-work.md) and [DRM (Widevine L3)](docs/drm.md) |
 | [assistant-fonts/](assistant-fonts/) | keeps the Google Assistant from crashing when Play services are disabled |
 | [projection/](projection/) | the vendor's projection settings (keystone, zoom, mode, auto focus) as a root app |
 | [hdmi-input/](hdmi-input/) | an "HDMI" app that shows the HDMI input through the stock TV framework |
