@@ -16,7 +16,7 @@
 [packages]
 com.hotack.silentsdk                 # [community, unverified] silent install SDK
 com.hotack.writesn                   # [community, unverified] serial number writer
-com.htc.htclauncherhighenglishd08    # [community + O] vendor launcher
+com.htc.htclauncherhighenglishd08    # [community, unverified] alternate vendor launcher, not on our firmware
 com.me.cash5                         # [community, unverified] pre-installed app
 com.htc.eventuploadservice           # [community + O] event upload service
 com.htc.expandsdk                    # [community + O] vendor expansion SDK
@@ -26,7 +26,7 @@ com.android.toofifi                  # [community, unverified] WLAN related help
 com.toofifi.lineserver               # [community, unverified] line server
 com.htc.samescreen                   # [community + O] screen mirroring app
 android.rockchip.update.service      # [community + O] Rockchip OTA service
-com.android.umanalytics.yiyou        # [community + O] analytics
+com.android.umanalytics.yiyou        # [community, unverified] seen on a different firmware family
 com.android.sysapp                   # [community, unverified] generic system-looking app
 com.google.adtest                    # [community, unverified] ad test app
 
