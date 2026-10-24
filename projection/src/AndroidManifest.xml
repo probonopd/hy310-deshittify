@@ -22,5 +22,11 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".KeystoneActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard|navigation"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 </manifest>
