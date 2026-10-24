@@ -63,6 +63,7 @@ apart.
 | [fel-backup/](fel-backup/) | full eMMC backup over USB, do this first |
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
 | [root/](root/) | root with Magisk, patched on the projector itself |
+| [assistant-fonts/](assistant-fonts/) | keeps the Google Assistant from crashing when Play services are disabled |
 | [projection/](projection/) | the vendor's projection settings (keystone, zoom, mode, auto focus) as a root app |
 | [hdmi-input/](hdmi-input/) | an "HDMI" app that shows the HDMI input through the stock TV framework |
 | [assistant-settings/](assistant-settings/) | an "Assistant Settings" app icon: Google Assistant, Searchable apps |
