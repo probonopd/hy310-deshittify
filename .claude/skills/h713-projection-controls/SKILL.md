@@ -32,3 +32,5 @@ The vendor screen (`ProjectActivity` in com.htc.spectraos) runs as `android.uid.
 - `su` grant: the first launch's Magisk prompt can be recorded as Deny if nobody answers; only the device owner should allow it. Do not delete the policy or press the dialog for them.
 - If the project disk is noexec, run scripts with `sh`; `adb pull -a <dir>` into a non-existing target flattens it.
 - Properties differ per unit and over time (auto keystone may be on, then off): read before assuming.
+- Never `cat` the files under `/sys/class/prj/` to look around: one of them (`bl_duty`) blocks on read, and the unit went offline and restarted shortly after. Only touch nodes you know, and never write `fan2power` (fan, lamp panel and status LED share that switch).
+- Display sleep (`KEYCODE_SLEEP` / `goToSleep`) is the vendor's standby: the unit left the network even with a kernel wake lock held, so it is not a way to switch only the projection off.

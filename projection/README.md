@@ -23,6 +23,17 @@ Up/down move between rows, OK or right changes a value, left goes back, back lea
 | Digital zoom (0-20) | `zoom_value`, `persist.sys.zoom.value`, and the four panel corners through SurfaceFlinger |
 | Manual keystone (4 corners) | opens a screen for the four corners: arrows move the marked corner (steps grow from 1 to 8 per press while a key is held), OK marks the next corner, holding OK resets, Back leaves. Refused while auto keystone or auto four corner is on, as in the vendor screen |
 | Camera view | live picture of the projector's camera (the one auto keystone and auto focus use), 4:3, Back leaves. Grants itself the camera permission through root |
+| Picture mode, Brightness, Contrast, Saturation, Hue, Sharpness | the vendor picture settings through the TV service (HIDL `ITvServer`); editing a value switches the picture mode to "custom", as in the vendor firmware |
+| Power mode | standby or direct power-on |
+| Audio mode | Standard, Music, Movie, News (`audio_mode` audio parameter) |
+| External input at startup | `persist.sys.default_source`, applied by the system after boot |
+| Screen saver | `screen_off_timeout`: 5, 10, 20, 60 minutes or never |
+| Button sound | `sound_effects_enabled` |
+| USB debug (adb) | `adb_enabled`; switching it off needs a second press within 5 seconds |
+| Lamp brightness | 90 or 100 only (100 is the factory default and the maximum) |
+| Factory reset | erases everything; needs a second press within 5 seconds |
+| Timed shutdown | off, 5, 10, 20 or 60 minutes with a warning notification; not re-armed after a reboot |
+| Bluetooth speaker | the vendor's A2DP sink switch; turns WLAN off, so it cuts a network adb session |
 | Reset keystone | zeroes the manual keystone and the zoom |
 | Installation mode | front, rear, front ceiling, rear ceiling, through the vendor TV service (HIDL `ITvServer`) |
 
