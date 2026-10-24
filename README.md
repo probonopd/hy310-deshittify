@@ -59,6 +59,7 @@ apart.
 |---|---|
 | [fel-backup/](fel-backup/) | full eMMC backup over USB, do this first |
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
+| [root/](root/) | root with Magisk, patched on the projector itself |
 | [magisk-debloat/](magisk-debloat/) | remove it for real, systemless Magisk module (needs root) |
 | [usb-audio/](usb-audio/) | Magisk module that turns USB audio back on (needs root) |
 
