@@ -1,8 +1,40 @@
 # Optional: a different launcher
 
-Nothing in this repository requires you to replace the vendor launcher, and nothing here changes it. This page
-only collects what is known, for those who want to try. **Everything below is untested by us unless it says
-otherwise.** Keep the vendor launcher installed until you have checked that you can still reach everything you need.
+Nothing in this repository requires you to replace the vendor launcher, and nothing here changes it by itself.
+This page collects what is known, for those who want to try one, and documents a tested, fully reversible way to
+do it: switch the Home role, keep the vendor launcher installed, switch back the same way whenever you want.
+
+## Tried: Projectivy Launcher
+
+[Projectivy Launcher](https://github.com/spocky/miproja1) (`com.spocky.projengmenu`), a free, actively maintained
+Android TV launcher, sideloaded from its own GitHub releases (not the Play Store, which is disabled here). No
+root or special permission is required for basic use; it asks for both during onboarding for extra features, and
+declining both still leaves a fully working launcher.
+
+```sh
+adb install ProjectivyLauncher-<version>.apk
+adb shell cmd role add-role-holder android.app.role.HOME com.spocky.projengmenu
+```
+
+This is the one that actually works: the `cmd package set-home-activity` approach other owners reported as not
+sticking is the pre-Android-10 mechanism. Android 10 and later resolve Home through `RoleManager`, and
+`cmd role add-role-holder` sets that role directly. Verify with `adb shell cmd shortcut get-default-launcher`.
+
+Tested on the black and white logo version: installs cleanly, the role switch takes immediately (no reboot
+needed), its onboarding can be completed without granting root or accessibility access, it auto-detects and
+categorizes every installed app including all the ones from this repository, and it switches the HDMI input
+itself through the same stock TV framework [hdmi-input](../hdmi-input/) uses, with no conflict between the two.
+All of this repository's apps (Settings, HDMI, Projection, Assistant Settings) launch exactly as before; the
+launcher has no effect on them.
+
+### Revert to the vendor launcher
+
+```sh
+adb shell cmd role add-role-holder android.app.role.HOME com.htc.spectraos
+```
+
+Nothing else needs undoing: the vendor launcher was never touched or disabled, and the [projection](../projection/)
+app does not depend on either launcher being active.
 
 ## What the vendor launcher does and does not do
 
@@ -32,13 +64,13 @@ power and file manager entries name other vendor packages.
 
 ## Things to know before trying one
 
-- Other owners report that Projectivy and Molla launchers work, that `cmd package set-home-activity` did not
-  stick, and that a launch-on-boot setting did not work
-  ([notes](https://gist.github.com/probonopd/3ad6b7777caea1503f00d5fe7710ad06)). Setting the default Home through the
-  Android role manager is the next thing to try, and we have not tried it.
+- Other owners report that Molla launcher also works
+  ([notes](https://gist.github.com/probonopd/3ad6b7777caea1503f00d5fe7710ad06)); not tried here.
+- A launch-on-boot ("start this app automatically") setting was reported by another owner as not working; not
+  re-tested here.
 - The HDMI input is not tied to the launcher: start it with the [hdmi-input](../hdmi-input/) app, or
   `am start com.softwinner.awlivetv/.MainActivity`.
 - Do not disable or remove the vendor launcher until the replacement is the default and you have checked the
   remote, HDMI, Settings and the projection app.
-- Undo is always: make the vendor launcher the default again (Settings, Apps, Default apps) and, if you changed
-  any property, set it back to the value you noted before.
+- Undo is always: switch the Home role back (see above), or use Settings, Apps, Default apps, Home; and, if you
+  changed any property from the previous section, set it back to the value you noted before.
