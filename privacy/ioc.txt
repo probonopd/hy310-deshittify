@@ -31,7 +31,7 @@ com.android.sysapp                   # [community, unverified] generic system-lo
 com.google.adtest                    # [community, unverified] ad test app
 
 [paths]
-/system/bin/qw                       # [O] Superuser su daemon: local root through a unix socket, no network port; see docs/qw-and-dbgserver.md
+/system/bin/qw                       # [O] Superuser su daemon, proven live: unauthenticated local root for any caller via a unix socket; see docs/qw-and-dbgserver.md
 /system/bin/wifi                     # [community, unverified] hidden helper
 /vendor/bin/dbgserver                # [O] dormant vendor debug server, TCP 65528 without authentication when enabled; see docs/qw-and-dbgserver.md
 /system/xbin/sysu                    # [community, unverified] su-like binary

@@ -2,9 +2,19 @@
 
 A community write-up calls `/system/bin/qw` a hidden su helper with a daemon on TCP port 65528, and the
 [audit script](../privacy/) flags both files. We analyzed copies of the two binaries from the black and white logo
-firmware (`Projector.20250214.153635`) with static analysis only: nothing was executed, on the host or on the
-device, and the device was only read. Findings below; items marked UNVERIFIED are inferred from the code and were
-not tested.
+firmware (`Projector.20250214.153635`). For `qw` the root-escalation finding below is proven live (one harmless
+command, `id`, run through it from an unprivileged UID); `dbgserver` was analyzed statically only, nothing
+executed and the device only read. Items marked UNVERIFIED are inferred from the code and were not tested.
+
+**Neither binary comes from anything in this repository or from rooting the unit.** Both sit in `/system`, carry
+the firmware's original `2008-12-31` placeholder build timestamp (the marker other stock files in this image carry;
+a file added afterward would show the real date), and `qw`'s SELinux labels (`qw_exec`, `qw_socket`) are custom
+types that only resolve because the vendor's own precompiled policy defines them. Rooting this unit only ever
+touched the `boot_a` partition (a Magisk-patched kernel and ramdisk, flashed with `fastboot flash boot_a`, see
+[../root](../root/)); nothing we do writes to `/system`. `qw` is also unrelated to Magisk's own su: the package
+name baked into it, `com.koushikdutta.superuser`, belongs to an old, separate Android root app ("Superuser",
+Chainfire/Koush era, roughly 2011-2014), not anything Magisk uses. The vendor shipped this daemon running,
+unauthenticated, by default, before anyone roots or modifies the unit.
 
 | | `/system/bin/qw` | `/vendor/bin/dbgserver` |
 |---|---|---|
@@ -15,7 +25,7 @@ not tested.
 | Started by | init, `/system/etc/init/qw.rc`: `service qw /system/bin/qw --daemon`, `user root`, `class core` | init, `/vendor/etc/init/dbgserver.rc`: only when `persist.vendor.dbgserver` is 1 |
 | State on the tested unit | running as root, all capabilities, SELinux domain `qw` | not running, the property is unset |
 
-## `qw`: a root helper, local only
+## `qw`: an unauthenticated root daemon, proven live
 
 - It is a build of the Android **Superuser** su (Koush's `com.koushikdutta.superuser`, version string
   `15 com.koushikdutta.superuser`), statically linked. Evidence: its usage text (`--daemon`), its paths for the
@@ -24,17 +34,25 @@ not tested.
 - **The claim of a daemon on TCP port 65528 is wrong for `qw`.** It only creates an `AF_UNIX` socket:
   `/dev/com.koushikdutta.superuser.daemon/server`, mode 0777, label `qw_socket`. Port 65528 belongs to
   `dbgserver` (below), which is probably where the confusion comes from.
-- The daemon reads the caller's identity from `SO_PEERCRED` and, from the decompiled code, **does almost no
-  authorization**: root, system and radio are allowed, the shell user is allowed, and other callers reach the same
-  code path that runs the requested command as the target user (default root). The Superuser app and its
-  database are not installed, so there is no prompt or whitelist (medium confidence: which mode `main()` runs in was
-  not confirmed). The client binary only works when its parent process has one of three vendor test-app names
-  (`.agingdragonbox`, `inner.dragonbox`, `ech.dragonenter`), but the daemon does not repeat that check.
-- **Consequence:** any local process that can connect to the 0777 socket may get a root shell. A network peer
-  cannot reach it directly, but code execution as any app, or `adb shell`, would become root. SELinux was in
-  permissive mode on the tested unit, so its rules restricted nothing there (whether enforcing policy would stop the
-  connect is UNVERIFIED). We found no sign of command and control: it looks like an insecure vendor or ODM root
-  helper, not a network backdoor.
+- The daemon reads the caller's identity from `SO_PEERCRED` (unspoofable) and **proven live: it performs no
+  real authorization**. We reverse-engineered its wire protocol (plain integers over the stream socket: pid,
+  isatty, uid, ppid, a mount flag, then a length-prefixed argv; the client then opens per-pid FIFOs under
+  `/dev/com.koushikdutta.superuser.daemon/<pid>.{stdout,stderr,stdin}` for I/O and reads back an exit code; no
+  file-descriptor passing), built a minimal native client for it, and connected from an ordinary, unprivileged app
+  UID (10071) that could not even create its own file in `/data/local/tmp`. The daemon forked a root child anyway
+  and ran `id`, which wrote, as root, a file in that same directory containing `uid=0(root) gid=0(root)
+  groups=0(root) context=u:r:qw:s0`. The Superuser app and its database are not installed, so there is no prompt,
+  password or allow-list anywhere on this path. The separate client-side check in the official `qw` binary (it
+  refuses to even try connecting unless its parent process's name is one of three vendor test-app strings) is not
+  a security boundary: it is client code the caller controls, and the test above bypassed it entirely by speaking
+  the protocol directly.
+- **Consequence:** any code that can run at all on the device, with no privileges of its own, becomes root with no
+  prompt. An installed app, a compromised app, or anyone with `adb shell` access, all become root immediately. A
+  network peer cannot reach it directly (it is a local unix socket, not a TCP port), but once such a peer has any
+  local code execution, this closes the gap to root instantly. SELinux was in permissive mode on the tested unit,
+  so its rules restricted nothing there (whether enforcing policy would stop the connect is UNVERIFIED). We found
+  no sign of command and control: it looks like an insecure vendor or ODM root helper left enabled, not a
+  deliberate backdoor, though the practical effect is the same.
 - Nothing else in the init files starts or mentions it (the `qw_sign` line in the USB script is an unrelated
   gadget attribute). Likely casualties if it were removed: the vendor aging and factory test apps, if they use it
   (UNVERIFIED). Magisk root is a separate path and does not depend on it.
@@ -62,6 +80,7 @@ not tested.
   binaries as leads.
 - Keep the projector off untrusted networks (a separate guest network or VLAN), and block TCP 65528 at the router
   as a precaution.
-- `qw` is the one that matters locally. Removing its init script (`/system/etc/init/qw.rc`) needs a change to the
-  system image or a Magisk overlay and has not been tried by us, so it is not part of this repository. Do not
-  delete the binaries by hand on a unit that boots from a verified `/system`.
+- `qw` is the one that matters locally, and it is already running by default on a stock unit. Removing its init
+  script (`/system/etc/init/qw.rc`) needs a change to the system image or a Magisk overlay and has not been built
+  yet, so it is not part of this repository. Do not delete the binaries by hand on a unit that boots from a
+  verified `/system`.
