@@ -27,7 +27,7 @@ Up/down move between rows, OK or right changes a value, left goes back, back lea
 | Power mode | standby or direct power-on |
 | Audio mode | Standard, Music, Movie, News (`audio_mode` audio parameter) |
 | External input at startup | `persist.sys.default_source`, applied by the system after boot |
-| Screen saver | `screen_off_timeout`: 5, 10, 20, 60 minutes or never |
+| Screen saver | `screen_off_timeout`: 5, 10, 20, 60 minutes or never. **On this firmware, letting it expire can take the whole unit down, not just the display: see [../docs/sleep-and-screen-off.md](../docs/sleep-and-screen-off.md). Setting it to never is the safe choice until that is fixed.** |
 | Button sound | `sound_effects_enabled` |
 | USB debug (adb) | `adb_enabled`; switching it off needs a second press within 5 seconds |
 | Lamp brightness | 90 or 100 only (100 is the factory default and the maximum) |
