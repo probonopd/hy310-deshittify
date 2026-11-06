@@ -59,15 +59,15 @@ PROP
 
 if [ -n "$build_only" ]; then echo "Module tree written to $build_only"; exit 0; fi
 
-adb shell rm -rf /data/local/tmp/$MOD
+adb shell rm -rf /data/local/tmp/${MOD:?}
 adb push "$tree" /data/local/tmp/ >/dev/null
 adb shell su -c "'
 set -e
-rm -rf /data/adb/modules/$MOD
+rm -rf /data/adb/modules/${MOD:?}
 cp -r /data/local/tmp/$MOD /data/adb/modules/
 chown -R root:root /data/adb/modules/$MOD
 chmod -R u+rwX,go+rX /data/adb/modules/$MOD
 chcon -R u:object_r:system_file:s0 /data/adb/modules/$MOD
-rm -rf /data/local/tmp/$MOD
+rm -rf /data/local/tmp/${MOD:?}
 '"
 echo "Installed. Reboot to activate: adb reboot"

@@ -31,7 +31,7 @@ mkdir -p "$tree"
 
 # disabled-only packages: removing them breaks things (see debloat/keep-installed.txt)
 names "$here/../debloat/keep-installed.txt" >"$tmp/keep"
-names "$here/../debloat/packages.txt" | grep -v -x -F -f "$tmp/keep" >"$tmp/pkgs" || true
+names "${PKGLIST:-$here/../debloat/packages.txt}" | grep -v -x -F -f "$tmp/keep" >"$tmp/pkgs" || true
 [ -s "$tmp/pkgs" ] || { echo "no packages to remove" >&2; exit 1; }
 
 # A /data copy is an update of a system app. Remove it first, otherwise "pm path" points at /data.
@@ -91,15 +91,15 @@ if [ -n "$build_only" ]; then
 	exit 0
 fi
 
-adb shell rm -rf /data/local/tmp/$MOD
+adb shell rm -rf /data/local/tmp/${MOD:?}
 adb push "$tree" /data/local/tmp/ >/dev/null
 adb shell su -c "'
 set -e
-rm -rf /data/adb/modules/$MOD
+rm -rf /data/adb/modules/${MOD:?}
 cp -r /data/local/tmp/$MOD /data/adb/modules/
 chown -R root:root /data/adb/modules/$MOD
 chmod -R u+rwX,go+rX /data/adb/modules/$MOD
 chcon -R u:object_r:system_file:s0 /data/adb/modules/$MOD
-rm -rf /data/local/tmp/$MOD
+rm -rf /data/local/tmp/${MOD:?}
 '"
 echo "Installed. Reboot to activate: adb reboot"
