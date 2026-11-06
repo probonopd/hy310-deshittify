@@ -17,23 +17,39 @@ permissions such as camera, microphone, input injection and reboot. This reposit
 documents what they are, how to switch them off, and how to do it without bricking the
 projector.
 
-## Two firmware versions
+## Not one device - at least three
 
-There are at least two versions of this projector in circulation that look identical
-from the outside. The easiest way to tell them apart is the boot logo:
+Three units bought as "HY310" / MAGCUBIC-branded projectors, from the outside
+indistinguishable, turned out to be three genuinely different devices. Two share the same
+chip but different firmware; the third is a different chip entirely. Do not assume an
+image, a dump, a partition offset, or a root method from one fits another - check first.
 
-| | Yellow MAGCUBIC logo at boot | Black and white MAGCUBIC logo at boot |
-|---|---|---|
-| Firmware build | `Projector.20250724.102119` (July 2025) | `Projector.20250214.153635` (February 2025) |
-| Build fingerprint | `Allwinner/h713_tuna_p3/h713-tuna_p3:11/RP1A.201005.006/Projector07241019:user/release-keys` | `Allwinner/h713_tuna_p3/h713-tuna_p3:11/RP1A.201005.006/projector02141535:user/release-keys` |
-| eMMC size (512-byte sectors) | 15,269,888 (about 7.28 GiB) | 15,335,424 (about 7.31 GiB, 32 MiB larger) |
-| GPT layout | 26 partitions | Same 26 partitions, same offsets; only `UDISK` (`/data`) is larger |
-| Vendor properties | not recorded yet | `persist.sys.Model=aodin`, `persist.sys.Channel=HY260Pro_SpectraOS_cyh` |
+| | Yellow MAGCUBIC logo at boot | Black and white MAGCUBIC logo at boot | Third unit |
+|---|---|---|---|
+| Chip | Allwinner H713 (`sun50iw12`) | Allwinner H713 (`sun50iw12`) | **Allwinner H726 (`sun50iw15`)** - different SoC, see [h726-root/](h726-root/) |
+| Android | 11 | 11 | 14 |
+| Firmware build | `Projector.20250724.102119` (July 2025) | `Projector.20250214.153635` (February 2025) | `Projector_20251208.113817` (December 2025) or later |
+| Build fingerprint | `Allwinner/h713_tuna_p3/h713-tuna_p3:11/RP1A.201005.006/Projector07241019:user/release-keys` | `Allwinner/h713_tuna_p3/h713-tuna_p3:11/RP1A.201005.006/projector02141535:user/release-keys` | `ADT-3/adt3/adt3:14/Projector_...:user/release-keys` |
+| eMMC size (512-byte sectors) | 15,269,888 (about 7.28 GiB) | 15,335,424 (about 7.31 GiB, 32 MiB larger) | 15,269,888 (about 7.28 GiB) |
+| GPT layout | 26 partitions | Same 26 partitions, same offsets; only `UDISK` (`/data`) is larger | A/B with `init_boot`/`vendor_boot` and a dynamic `super`, not the same layout at all |
+| Vendor properties | not recorded yet | `persist.sys.Model=aodin`, `persist.sys.Channel=HY260Pro_SpectraOS_cyh` | `persist.sys.Model=aodin`, `persist.sys.Channel=HY260Pro_p1_en_MagcubicOS` |
 
-Do not assume an image, a dump or a partition offset from one version fits the other.
-The partition table looks the same, but the dynamic partitions inside `super` sit at
-different offsets on each unit, the eMMC sizes differ, and the firmware is five months
-apart.
+**To tell them apart**, before anything else:
+
+```sh
+adb shell getprop ro.hardware             # sun50iw12p1 = H713 (first two columns)  sun50iw15p1 = H726 (third column)
+adb shell getprop ro.build.version.release   # 11 or 14
+```
+
+or, in FEL mode: `sunxi-fel version` reports `soc=00001860(H713)` for the first two, and
+`soc=00001911(unknown)` for the H726 one. If you have the H726 one, use
+[h726-root/](h726-root/) instead of the rest of this repository - the two chips share
+nothing below the Android level: different boot image format, different FEL behavior,
+different root method, different malware package names.
+
+The two H713 units are not interchangeable either: the partition table looks the same, but
+the dynamic partitions inside `super` sit at different offsets on each unit, the eMMC sizes
+differ, and the firmware is five months apart.
 
 ## What works so far
 
@@ -63,6 +79,7 @@ apart.
 | [fel-backup/](fel-backup/) | full eMMC backup over USB, do this first |
 | [debloat/](debloat/) | disable the malware and bloat, no root needed |
 | [root/](root/) | root with Magisk, patched on the projector itself |
+| [h726-root/](h726-root/) | a **different chip** (Allwinner H726/sun50iw15, Android 14) sold in the same family of projectors - do not mix its steps with the rest of this repository |
 | [privacy/](privacy/) | privacy hardening script (with undo) and a read-only audit against known malware indicators |
 | [launcher/](launcher/) | optional: what is known about using a different launcher (nothing here changes it) |
 | [docs/](docs/) | [related projects](docs/related-work.md), [DRM (Widevine L3)](docs/drm.md), [the `qw` and `dbgserver` binaries](docs/qw-and-dbgserver.md), [sleep/screen-off taking the whole unit down](docs/sleep-and-screen-off.md) |
