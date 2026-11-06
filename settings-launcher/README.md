@@ -2,8 +2,16 @@
 
 The vendor launcher replaces Settings with its own screens, and the standard
 `android.settings.SETTINGS` intent resolves to nothing. The stock Settings app is still
-installed (`com.android.settings`, it opens fine when started by component name), it just has
-no way in. This is a 5 KB app with a gear icon whose only job is to start it. No root needed.
+installed, it opens fine when started by component name, it just has no way in. This is a
+5 KB app with a gear icon whose only job is to start it. No root needed.
+
+Which component that is differs by firmware: `com.android.settings/.Settings` (the
+phone-style Settings app) on the Android 11 (H713) builds documented in the rest of this
+repository, `com.android.tv.settings/.MainSettings` (Android TV's own Settings app) on the
+H726 unit in [../h726-root/](../h726-root/). The app tries both in that order at runtime
+(catching `ActivityNotFoundException` and falling through), then the generic
+`android.settings.SETTINGS` intent as a last resort - one apk works on either firmware
+without needing to know in advance which one is installed.
 
 ```sh
 adb install hy310-settings.apk
@@ -37,5 +45,8 @@ The gear is the Material Design "settings" icon (Apache License 2.0).
 
 ## Tested
 
-Black and white logo version, Android 11: the app starts the stock Settings app, listed as
-`com.android.settings/.Settings`.
+- Black and white logo version, Android 11: the first candidate,
+  `com.android.settings/.Settings`, starts directly.
+- The H726 unit, Android 14: `com.android.settings/.Settings` does not exist there at all
+  (`pm` reports the package unknown); the app catches that and falls through to
+  `com.android.tv.settings/.MainSettings`, which starts correctly.
