@@ -91,6 +91,7 @@ differ, and the firmware is five months apart.
 | [settings-launcher/](settings-launcher/) | an "Android Settings" app icon: the vendor hides the stock Settings app |
 | [magisk-debloat/](magisk-debloat/) | remove it for real, systemless Magisk module (needs root) |
 | [usb-audio/](usb-audio/) | Magisk module that turns USB audio back on (needs root) |
+| [x96q/](x96q/) | **not a HY310 device** - an unrelated "X96Q" Android TV box (Allwinner H616, marketed as H313), kept here only for overlapping FEL/Allwinner findings |
 
 ## Claude Code skills
 
