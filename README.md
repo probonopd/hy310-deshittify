@@ -1,4 +1,4 @@
-# hy310-deshittify
+# china-android-tv-deshittify
 
 Notes and scripts for taking back control of the **MAGCUBIC HY310** projector and its
 rebadges (Allwinner H713, Android 11): getting rid of the malware and adware it ships

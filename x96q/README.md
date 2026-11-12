@@ -105,6 +105,44 @@ abandoned in favor of the live-adb method above:
   manufacturing batches with substituted components. Confirming this would need a
   UART/serial connection to see the SPL's own console output.
 
+## Factory malware/spyware
+
+Checked the full package list (`pm list packages -f`) against each app's actual granted
+permissions (`dumpsys package <name>`), not just suspicious-sounding names. Found the same
+category of factory-installed spyware already documented in this repository for the HY310
+projectors (`com.android.vending` = a trojanized clone of the real Play Store, same
+finding, same package name) - this appears to be an ODM-wide supply-chain pattern, not
+specific to any one chip vendor or product line:
+
+- **`com.android.vending`** ("Tubesky") - its own dex strings contain genuine Google Play
+  endpoints (`android.clients.google.com`, `gvt1.com`): a repackaged/trojanized clone of
+  the real Play Store, not a from-scratch fake. Requests `INSTALL_PACKAGES`,
+  `DELETE_PACKAGES`, `SEND_SMS_NO_CONFIRMATION`, `RECORD_AUDIO`.
+- **An unauthorized third-party app store** - silent-install capability
+  (`REQUEST_INSTALL_PACKAGES`), `DISABLE_KEYGUARD`, overlay windows, bundling Chinese
+  ad/analytics SDKs for its own storefront.
+- **A fake "memory cleaner" and a generic "system update" app sharing the exact same
+  overprivileged permission template** - both pre-grant themselves (`SYSTEM_FIXED`/
+  `GRANTED_BY_DEFAULT`, not revokable from Settings) call-log and fine-location access
+  that neither has any legitimate reason to need. Two differently-named, differently-
+  purposed apps stamped from the same template is not a coincidence.
+- **Factory burn-in/aging-test apps** with `INJECT_EVENT` (synthetic touch/key input
+  anywhere in the system), `CAMERA`, `RECORD_AUDIO`, `DEVICE_POWER`, `MASTER_CLEAR` and
+  `INTERNET` all together - a full remote-control profile if ever triggered over the
+  network, the same category as the `runin.sh` backdoor documented elsewhere in this
+  repository for the HY310 projectors, but considerably more capable.
+- On a related device from the same ODM (different, non-Allwinner chip - out of scope for
+  this repository, not detailed here): two further factory-test-named apps with an even
+  more extreme permission set - `INJECT_EVENTS`, `MASTER_CLEAR`, `REBOOT`,
+  `MANAGE_DEBUGGING`, `WRITE_SECURE_SETTINGS`, plus pre-granted camera/microphone/SMS/
+  call/contacts/location access, all without ever showing a permission dialog. A textbook
+  BadBox-class remote-control backdoor profile, not bloat.
+
+All disabled via `pm disable-user --user 0 <package>` - reversible, no root procedure
+needed on either device (both run `adbd` as root out of the box, being `eng`/`userdebug`
+test-keys builds rather than production `user` builds - itself worth knowing, since it
+means `adb root` works immediately on this ODM's units without any separate exploit).
+
 ## Disclaimer
 
 Same as the rest of this repository: you can damage your device, back it up first, none of
