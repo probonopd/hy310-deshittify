@@ -117,6 +117,9 @@ Any full reflash that does not leave these alone is not safe.
   backups here possible.
 - [YuujiLab/HY300-H713-Research](https://github.com/YuujiLab/HY300-H713-Research):
   research on the closely related HY300, including a Magisk guide.
+- [raffaeledf9/ReHY320](https://github.com/raffaeledf9/ReHY320):
+  an offline firmware clean of the HY320 from a verified backup, with verified boot
+  rebuilt using owner-generated keys and the vendor apps replaced.
 
 ## Disclaimer
 
