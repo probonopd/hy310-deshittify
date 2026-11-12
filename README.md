@@ -85,6 +85,7 @@ differ, and the firmware is five months apart.
 | [docs/](docs/) | [related projects](docs/related-work.md), [DRM (Widevine L3)](docs/drm.md), [the `qw` and `dbgserver` binaries](docs/qw-and-dbgserver.md), [sleep/screen-off taking the whole unit down](docs/sleep-and-screen-off.md) |
 | [qw-disable/](qw-disable/) | stops the unauthenticated `qw` root daemon from starting at boot (needs root) |
 | [assistant-fonts/](assistant-fonts/) | keeps the Google Assistant from crashing when Play services are disabled |
+| [hy310-freesans/](hy310-freesans/) | replaces the device-wide default font (Roboto) with GNU FreeSans Bold, systemless Magisk module (needs root) |
 | [projection/](projection/) | the vendor's projection settings (keystone, zoom, mode, auto focus) as a root app |
 | [hdmi-input/](hdmi-input/) | an "HDMI" app that shows the HDMI input through the stock TV framework |
 | [assistant-settings/](assistant-settings/) | an "Assistant Settings" app icon: Google Assistant, Searchable apps |
